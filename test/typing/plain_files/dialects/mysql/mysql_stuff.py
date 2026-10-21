@@ -34,8 +34,8 @@ def test_insert_on_duplicate_key_update() -> None:
 
 def test_json_column_types() -> None:
     """Test JSON column type inference with type parameters."""
-    c_json: Column[Any] = Column(JSON())
-    assert_type(c_json, Column[Any])
+    c_json: Column[Any, Any, Any] = Column(JSON())
+    assert_type(c_json, Column[Any, Any, Any])
 
     c_json_dict = Column(JSON[Dict[str, Any]]())
     assert_type(c_json_dict, Column[Dict[str, Any]])

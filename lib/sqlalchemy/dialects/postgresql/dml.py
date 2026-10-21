@@ -216,7 +216,7 @@ class OnConflictClause(SyntaxExtension, ClauseElement):
     stringify_dialect = "postgresql"
 
     constraint_target: Optional[str]
-    inferred_target_elements: Optional[List[Union[str, schema.Column[Any]]]]
+    inferred_target_elements: Optional[List[Union[str, schema.Column[Any, Any, Any]]]]
     inferred_target_whereclause: Optional[
         Union[ColumnElement[Any], TextClause]
     ]

@@ -15,6 +15,7 @@ from typing import Generic
 from typing import Iterable
 from typing import Literal
 from typing import Mapping
+from typing import Never
 from typing import NoReturn
 from typing import Optional
 from typing import overload
@@ -24,12 +25,17 @@ from typing import Tuple
 from typing import Type
 from typing import TYPE_CHECKING
 from typing import TypeAlias
-from typing import TypeVar
 from typing import Union
+
+from typing_extensions import TypeVar
 
 from . import roles
 from .. import exc
 from .. import util
+from .base import _NoArg
+from .base import SchemaConst
+from .base import SchemaEventTarget as SchemaEventTarget
+from .type_api import TypeEngine
 from ..inspection import Inspectable
 from ..util.typing import TupleAny
 from ..util.typing import TypeVarTuple
@@ -73,7 +79,6 @@ if TYPE_CHECKING:
     from .selectable import TableClause
     from .sqltypes import TableValueType
     from .sqltypes import TupleType
-    from .type_api import TypeEngine
     from ..engine import Connection
     from ..engine import Dialect
     from ..engine import Engine
@@ -82,8 +87,12 @@ if TYPE_CHECKING:
 _T = TypeVar("_T", bound=Any)
 _T_co = TypeVar("_T_co", bound=Any, covariant=True)
 _Ts = TypeVarTuple("_Ts")
-_Ts2 = TypeVarTuple("_Ts2")
 
+ColumnAllowedTypes = type[TypeEngine[Any]] | int | float | str | bytes | SchemaEventTarget
+
+_C = TypeVar('_C', bound=ColumnAllowedTypes)
+_N = TypeVar('_N', bound=Literal[True, False] | bool | Never, default=Never)
+_D = TypeVar('_D', default=Never)
 
 _CE = TypeVar("_CE", bound="ColumnElement[Any]")
 

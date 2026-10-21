@@ -69,7 +69,7 @@ class Named(Generic[_T]):
 
 
 # NOTE: TypedColumns subclasses are ignored by the ORM mapping process
-class TypedColumns(ReadOnlyColumnCollection[str, "Column[Any]"]):
+class TypedColumns(ReadOnlyColumnCollection[str, "Column[Any, Any, Any]"]):
     """Class that generally represent the typed columns of a :class:`.Table`,
     but can be used with most :class:`_sql.FromClause` subclasses with the
     :meth:`_sql.FromClause.with_cols` method.
@@ -222,9 +222,9 @@ _ColClauseCC_co = TypeVar(
 )
 _ColCC_co = TypeVar(
     "_ColCC_co",
-    bound=ReadOnlyColumnCollection[str, "Column[Any]"],
+    bound=ReadOnlyColumnCollection[str, "Column[Any, Any, Any]"],
     covariant=True,
-    default=ReadOnlyColumnCollection[str, "Column[Any]"],
+    default=ReadOnlyColumnCollection[str, "Column[Any, Any, Any]"],
 )
 
 _TC = TypeVar("_TC", bound=TypedColumns)
@@ -247,8 +247,8 @@ class HasRowPos(Protocol[Unpack[_Ts]]):
 @util.preload_module("sqlalchemy.sql.schema")
 def _extract_columns_from_class(
     table_columns_cls: type[TypedColumns],
-) -> list[Column[Any]]:
-    columns: dict[str, Column[Any]] = {}
+) -> list[Column[Any, Any, Any]]:
+    columns: dict[str, Column[Any, Any, Any]] = {}
 
     Column = util.preloaded.sql_schema.Column
     NULL_UNSPECIFIED = util.preloaded.sql_schema.NULL_UNSPECIFIED

@@ -64,11 +64,11 @@ def select_name(table: Table[with_name]) -> Select[str]:
 
 
 def default_generic(table: Table) -> None:
-    assert_type(table.c.name, Column[Any])
+    assert_type(table.c.name, Column[Any, Any, Any])
 
 
 def generic_any(table: Table[Any]) -> None:
-    # TODO: would be nice to have this also be Column[Any]
+    # TODO: would be nice to have this also be Column[Any, Any, Any]
     assert_type(table.c.name, Any)
 
 
@@ -92,15 +92,15 @@ class address_cols(TypedColumns):
 
 address = Table("address", meta, address_cols, Column("extra", Integer))
 assert_type(address, Table[address_cols])
-assert_type(address.c.extra, Column[Any])
-assert_type(address.c["user"], Column[Any])
+assert_type(address.c.extra, Column[Any, Any, Any])
+assert_type(address.c["user"], Column[Any, Any, Any])
 assert_type("user" in address.c, bool)
 assert_type(address.c.keys(), list[str])
 
 plain = Table("a", meta, Column("x", Integer), Column("y", String))
-assert_type(plain, Table[ReadOnlyColumnCollection[str, Column[Any]]])
-assert_type(plain.c.x, Column[Any])
-assert_type(plain.c.y, Column[Any])
+assert_type(plain, Table[ReadOnlyColumnCollection[str, Column[Any, Any, Any]]])
+assert_type(plain.c.x, Column[Any, Any, Any])
+assert_type(plain.c.y, Column[Any, Any, Any])
 
 
 class plain_cols(TypedColumns):
@@ -131,7 +131,7 @@ class address_join_cols(TypedColumns):
 join_typed = join.with_cols(address_join_cols)
 assert_type(join_typed, Join[address_join_cols])
 assert_type(join_typed.c.address_user, Column[str])
-assert_type(join_typed.c.address_x, Column[Any])
+assert_type(join_typed.c.address_x, Column[Any, Any, Any])
 
 my_select = select(address.c.user, address.c.address)
 my_cte = my_select.cte().with_cols(address_cols)

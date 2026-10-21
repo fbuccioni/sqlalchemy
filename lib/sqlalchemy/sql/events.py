@@ -340,7 +340,7 @@ class DDLEvents(event.Events[SchemaEventTarget]):
         """
 
     def _sa_event_column_added_to_pk_constraint(
-        self, const: Constraint, col: Column[Any]
+        self, const: Constraint, col: Column[Any, Any, Any]
     ) -> None:
         """internal event hook used for primary key naming convention
         updates.

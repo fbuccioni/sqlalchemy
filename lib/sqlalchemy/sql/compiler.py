@@ -557,7 +557,7 @@ class _InsertManyValues(NamedTuple):
 
     """
 
-    sentinel_columns: Optional[Sequence[Column[Any]]] = None
+    sentinel_columns: Optional[Sequence[Column[Any, Any, Any]]] = None
     """List of sentinel columns that were located.
 
     This list is only here if the INSERT asked for
@@ -1188,15 +1188,15 @@ class SQLCompiler(Compiled):
     INSERT/UPDATE/DELETE
     """
 
-    postfetch: Optional[List[Column[Any]]]
+    postfetch: Optional[List[Column[Any, Any, Any]]]
     """list of columns that can be post-fetched after INSERT or UPDATE to
     receive server-updated values"""
 
-    insert_prefetch: Sequence[Column[Any]] = ()
+    insert_prefetch: Sequence[Column[Any, Any, Any]] = ()
     """list of columns for which default values should be evaluated before
     an INSERT takes place"""
 
-    update_prefetch: Sequence[Column[Any]] = ()
+    update_prefetch: Sequence[Column[Any, Any, Any]] = ()
     """list of columns for which onupdate default values should be evaluated
     before an UPDATE takes place"""
 
@@ -5884,7 +5884,7 @@ class SQLCompiler(Compiled):
 
     def _get_sentinel_column_for_table(
         self, table: Table
-    ) -> Optional[Sequence[Column[Any]]]:
+    ) -> Optional[Sequence[Column[Any, Any, Any]]]:
         """given a :class:`.Table`, return a usable sentinel column or
         columns for this dialect if any.
 
@@ -7603,7 +7603,7 @@ class DDLCompiler(Compiled):
         )
 
     def get_column_specification(
-        self, column: Column[Any], **kwargs: Any
+        self, column: Column[Any, Any, Any], **kwargs: Any
     ) -> str:
         colspec = (
             self.preparer.format_column(column)
@@ -7637,7 +7637,7 @@ class DDLCompiler(Compiled):
     def post_create_table(self, table: Table) -> str:
         return ""
 
-    def get_column_default_string(self, column: Column[Any]) -> Optional[str]:
+    def get_column_default_string(self, column: Column[Any, Any, Any]) -> Optional[str]:
         if isinstance(column.server_default, schema.DefaultClause):
             return self.render_default_string(column.server_default.arg)
         else:

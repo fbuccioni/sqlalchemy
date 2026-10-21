@@ -48,7 +48,7 @@ from ..sql._typing import _no_kw
 from ..sql.base import _NoArg
 from ..sql.base import SchemaEventTarget
 from ..sql.schema import _InsertSentinelColumnDefault
-from ..sql.schema import SchemaConst
+from ..sql.base import SchemaConst
 from ..sql.selectable import FromClause
 
 if TYPE_CHECKING:

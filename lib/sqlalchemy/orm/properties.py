@@ -55,7 +55,7 @@ from ..sql import coercions
 from ..sql import roles
 from ..sql.base import _NoArg
 from ..sql.schema import Column
-from ..sql.schema import SchemaConst
+from ..sql.base import SchemaConst
 from ..sql.type_api import TypeEngine
 from ..util.typing import de_optionalize_union_types
 from ..util.typing import includes_none
@@ -231,7 +231,7 @@ class ColumnProperty(
         return self
 
     @property
-    def columns_to_assign(self) -> List[Tuple[Column[Any], int]]:
+    def columns_to_assign(self) -> List[Tuple[Column[Any, Any, Any], int]]:
         # mypy doesn't care about the isinstance here
         return [
             (c, 0)  # type: ignore[misc]
@@ -666,7 +666,7 @@ class MappedColumn(
             return None
 
     @property
-    def columns_to_assign(self) -> List[Tuple[Column[Any], int]]:
+    def columns_to_assign(self) -> List[Tuple[Column[Any, Any, Any], int]]:
         return [
             (
                 self.column,

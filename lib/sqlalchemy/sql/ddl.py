@@ -1045,9 +1045,9 @@ class CreateColumn(BaseDDLElement):
 
     __visit_name__ = "create_column"
 
-    element: Column[Any]
+    element: Column[Any, Any, Any]
 
-    def __init__(self, element: Column[Any]) -> None:
+    def __init__(self, element: Column[Any, Any, Any]) -> None:
         self.element = element
 
 
@@ -1230,13 +1230,13 @@ class DropTableComment(_CreateDropBase["Table"]):
     __visit_name__ = "drop_table_comment"
 
 
-class SetColumnComment(_CreateDropBase["Column[Any]"]):
+class SetColumnComment(_CreateDropBase["Column[Any, Any, Any]"]):
     """Represent a COMMENT ON COLUMN IS statement."""
 
     __visit_name__ = "set_column_comment"
 
 
-class DropColumnComment(_CreateDropBase["Column[Any]"]):
+class DropColumnComment(_CreateDropBase["Column[Any, Any, Any]"]):
     """Represent a COMMENT ON COLUMN IS NULL statement."""
 
     __visit_name__ = "drop_column_comment"

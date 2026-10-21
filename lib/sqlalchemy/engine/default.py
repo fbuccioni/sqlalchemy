@@ -1913,13 +1913,13 @@ class DefaultExecutionContext(ExecutionContext):
         return self.root_connection.engine
 
     @util.memoized_property
-    def postfetch_cols(self) -> Optional[Sequence[Column[Any]]]:
+    def postfetch_cols(self) -> Optional[Sequence[Column[Any, Any, Any]]]:
         if TYPE_CHECKING:
             assert isinstance(self.compiled, SQLCompiler)
         return self.compiled.postfetch
 
     @util.memoized_property
-    def prefetch_cols(self) -> Optional[Sequence[Column[Any]]]:
+    def prefetch_cols(self) -> Optional[Sequence[Column[Any, Any, Any]]]:
         if TYPE_CHECKING:
             assert isinstance(self.compiled, SQLCompiler)
         if self.isinsert:

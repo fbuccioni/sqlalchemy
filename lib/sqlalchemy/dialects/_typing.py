@@ -20,7 +20,7 @@ from ..sql.schema import Index
 
 _OnConflictConstraintT = Union[str, ColumnCollectionConstraint, Index, None]
 _OnConflictIndexElementsT = Optional[
-    Iterable[Union[Column[Any], str, roles.DDLConstraintColumnRole]]
+    Iterable[Union[Column[Any, Any, Any], str, roles.DDLConstraintColumnRole]]
 ]
 _OnConflictIndexWhereT = Optional[roles.WhereHavingRole]
 _OnConflictSetT = Optional[

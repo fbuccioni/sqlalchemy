@@ -192,7 +192,7 @@ def expect(
     role: Type[roles.DDLReferredColumnRole],
     element: Any,
     **kw: Any,
-) -> Union[Column[Any], str]: ...
+) -> Union[Column[Any, Any, Any], str]: ...
 
 
 @overload
@@ -200,7 +200,7 @@ def expect(
     role: Type[roles.DDLConstraintColumnRole],
     element: Any,
     **kw: Any,
-) -> Union[Column[Any], str]: ...
+) -> Union[Column[Any, Any, Any], str]: ...
 
 
 @overload
@@ -448,23 +448,23 @@ def expect_col_expression_collection(
     expressions: Iterable[_DDLColumnArgument],
 ) -> Iterator[
     Tuple[
-        Union[str, Column[Any]],
+        Union[str, Column[Any, Any, Any]],
         Optional[ColumnClause[Any]],
         Optional[str],
-        Optional[Union[Column[Any], str]],
+        Optional[Union[Column[Any, Any, Any], str]],
     ]
 ]:
     for expr in expressions:
         strname = None
         column = None
 
-        resolved: Union[Column[Any], str] = expect(role, expr)
+        resolved: Union[Column[Any, Any, Any], str] = expect(role, expr)
         if isinstance(resolved, str):
             assert isinstance(expr, str)
             strname = resolved = expr
         else:
-            cols: List[Column[Any]] = []
-            col_append: _TraverseCallableType[Column[Any]] = cols.append
+            cols: List[Column[Any, Any, Any]] = []
+            col_append: _TraverseCallableType[Column[Any, Any, Any]] = cols.append
             visitors.traverse(resolved, {}, {"column": col_append})
             if cols:
                 column = cols[0]

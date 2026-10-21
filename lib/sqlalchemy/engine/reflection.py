@@ -1589,7 +1589,7 @@ class Inspector(inspection.Inspectable["Inspector"]):
                 table._validate_dialect_kwargs(tbl_opts)
 
         found_table = False
-        cols_by_orig_name: Dict[str, sa_schema.Column[Any]] = {}
+        cols_by_orig_name: Dict[str, sa_schema.Column[Any, Any, Any]] = {}
 
         for col_d in _reflect_info.columns[table_key]:
             found_table = True
@@ -1665,7 +1665,7 @@ class Inspector(inspection.Inspectable["Inspector"]):
         col_d: ReflectedColumn,
         include_columns: Optional[Collection[str]],
         exclude_columns: Collection[str],
-        cols_by_orig_name: Dict[str, sa_schema.Column[Any]],
+        cols_by_orig_name: Dict[str, sa_schema.Column[Any, Any, Any]],
     ) -> None:
         orig_name = col_d["name"]
 
@@ -1736,7 +1736,7 @@ class Inspector(inspection.Inspectable["Inspector"]):
         _reflect_info: _ReflectionInfo,
         table_key: TableKey,
         table: sa_schema.Table,
-        cols_by_orig_name: Dict[str, sa_schema.Column[Any]],
+        cols_by_orig_name: Dict[str, sa_schema.Column[Any, Any, Any]],
         exclude_columns: Collection[str],
     ) -> None:
         pk_cons = _reflect_info.pk_constraint.get(table_key)
@@ -1763,7 +1763,7 @@ class Inspector(inspection.Inspectable["Inspector"]):
         _reflect_info: _ReflectionInfo,
         table_key: TableKey,
         table: sa_schema.Table,
-        cols_by_orig_name: Dict[str, sa_schema.Column[Any]],
+        cols_by_orig_name: Dict[str, sa_schema.Column[Any, Any, Any]],
         include_columns: Optional[Collection[str]],
         exclude_columns: Collection[str],
         resolve_fks: bool,
@@ -1865,7 +1865,7 @@ class Inspector(inspection.Inspectable["Inspector"]):
         _reflect_info: _ReflectionInfo,
         table_key: TableKey,
         table: sa_schema.Table,
-        cols_by_orig_name: Dict[str, sa_schema.Column[Any]],
+        cols_by_orig_name: Dict[str, sa_schema.Column[Any, Any, Any]],
         include_columns: Optional[Collection[str]],
         exclude_columns: Collection[str],
         reflection_options: Dict[str, Any],
@@ -1931,7 +1931,7 @@ class Inspector(inspection.Inspectable["Inspector"]):
         _reflect_info: _ReflectionInfo,
         table_key: TableKey,
         table: sa_schema.Table,
-        cols_by_orig_name: Dict[str, sa_schema.Column[Any]],
+        cols_by_orig_name: Dict[str, sa_schema.Column[Any, Any, Any]],
         include_columns: Optional[Collection[str]],
         exclude_columns: Collection[str],
         reflection_options: Dict[str, Any],
@@ -1979,7 +1979,7 @@ class Inspector(inspection.Inspectable["Inspector"]):
         _reflect_info: _ReflectionInfo,
         table_key: TableKey,
         table: sa_schema.Table,
-        cols_by_orig_name: Dict[str, sa_schema.Column[Any]],
+        cols_by_orig_name: Dict[str, sa_schema.Column[Any, Any, Any]],
         include_columns: Optional[Collection[str]],
         exclude_columns: Collection[str],
         reflection_options: Dict[str, Any],

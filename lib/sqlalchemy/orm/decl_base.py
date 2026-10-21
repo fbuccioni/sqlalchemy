@@ -982,12 +982,12 @@ class _DeclarativeMapperConfig(_MapperConfig, _ClassScanAbstractConfig):
     registry: _RegistryType
     local_table: Optional[FromClause]
     persist_selectable: Optional[FromClause]
-    declared_columns: util.OrderedSet[Column[Any]]
-    unmapped_columns: util.OrderedSet[Column[Any]]
+    declared_columns: util.OrderedSet[Column[Any, Any, Any]]
+    column_ordering: Dict[Column[Any, Any, Any], int]
     column_ordering: Dict[Column[Any], int]
     column_copies: Dict[
-        Union[MappedColumn[Any], Column[Any]],
-        Union[MappedColumn[Any], Column[Any]],
+        Union[MappedColumn[Any], Column[Any, Any, Any]],
+        Union[MappedColumn[Any], Column[Any, Any, Any]],
     ]
     tablename: Optional[str]
     mapper_args: Mapping[str, Any]
@@ -1413,7 +1413,7 @@ class _DeclarativeMapperConfig(_MapperConfig, _ClassScanAbstractConfig):
         attribute_is_overridden: Callable[[str, Any], bool],
         fixed_table: bool,
         originating_class: Type[Any],
-    ) -> Dict[str, Union[Column[Any], MappedColumn[Any]]]:
+    ) -> Dict[str, Union[Column[Any, Any, Any], MappedColumn[Any]]]:
         cls = self.cls
         dict_ = self.clsdict_view
         locally_collected_attributes: Dict[
@@ -2387,7 +2387,7 @@ def _mapped_column_for_annotation(
         return MappedColumn()
 
 
-def _undefer_column_name(key: str, column: Column[Any]) -> None:
+def _undefer_column_name(key: str, column: Column[Any, Any, Any]) -> None:
     if column.key is None:
         column.key = key
     if column.name is None:

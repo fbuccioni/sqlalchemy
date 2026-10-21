@@ -163,8 +163,8 @@ def test_jsonb_parameterization() -> None:
 def test_json_column_types() -> None:
     """Test JSON column type inference with type parameters."""
 
-    c_json: Column[Any] = Column(JSON())
-    assert_type(c_json, Column[Any])
+    c_json: Column[Any, Any, Any] = Column(JSON())
+    assert_type(c_json, Column[Any, Any, Any])
 
     c_json_dict = Column(JSON[Dict[str, Any]]())
     assert_type(c_json_dict, Column[Dict[str, Any]])
@@ -186,8 +186,8 @@ def test_json_orm_mapping() -> None:
 
 def test_jsonb_column_types() -> None:
     """Test JSONB column type inference with type parameters."""
-    c_jsonb: Column[Any] = Column(JSONB())
-    assert_type(c_jsonb, Column[Any])
+    c_jsonb: Column[Any, Any, Any] = Column(JSONB())
+    assert_type(c_jsonb, Column[Any, Any, Any])
 
     c_jsonb_dict = Column(JSONB[Dict[str, Any]]())
     assert_type(c_jsonb_dict, Column[Dict[str, Any]])

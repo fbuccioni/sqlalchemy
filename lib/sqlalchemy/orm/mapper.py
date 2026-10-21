@@ -1135,7 +1135,7 @@ class Mapper(
 
     """
 
-    _columns: sql_base.WriteableColumnCollection[str, Column[Any]]
+    _columns: sql_base.WriteableColumnCollection[str, Column[Any, Any, Any]]
 
     @util.memoized_property
     def _path_registry(self) -> _CachingEntityRegistry:
@@ -1487,7 +1487,7 @@ class Mapper(
 
         self.__dict__.pop("_configure_failed", None)
 
-    def _str_arg_to_mapped_col(self, argname: str, key: str) -> Column[Any]:
+    def _str_arg_to_mapped_col(self, argname: str, key: str) -> Column[Any, Any, Any]:
         try:
             prop = self._props[key]
         except KeyError as err:
@@ -2381,7 +2381,7 @@ class Mapper(
             self.add_property(key, value)
 
     def add_property(
-        self, key: str, prop: Union[Column[Any], MapperProperty[Any]]
+        self, key: str, prop: Union[Column[Any, Any, Any], MapperProperty[Any]]
     ) -> None:
         """Add an individual MapperProperty to this mapper.
 
@@ -2490,7 +2490,7 @@ class Mapper(
         return self._columntoproperty[column]
 
     @HasMemoized.memoized_attribute
-    def columns(self) -> ReadOnlyColumnCollection[str, Column[Any]]:
+    def columns(self) -> ReadOnlyColumnCollection[str, Column[Any, Any, Any]]:
         """A collection of :class:`_schema.Column` or other scalar expression
         objects maintained by this :class:`_orm.Mapper`.
 
@@ -2508,7 +2508,7 @@ class Mapper(
         return self._columns.as_readonly()
 
     @HasMemoized.memoized_attribute
-    def c(self) -> ReadOnlyColumnCollection[str, Column[Any]]:
+    def c(self) -> ReadOnlyColumnCollection[str, Column[Any, Any, Any]]:
         """A synonym for :attr:`_orm.Mapper.columns`."""
         return self._columns.as_readonly()
 
@@ -2778,12 +2778,12 @@ class Mapper(
     @HasMemoized.memoized_attribute
     def _server_default_cols(
         self,
-    ) -> Mapping[FromClause, FrozenSet[Column[Any]]]:
+    ) -> Mapping[FromClause, FrozenSet[Column[Any, Any, Any]]]:
         return {
             table: frozenset(
                 [
                     col
-                    for col in cast("Iterable[Column[Any]]", columns)
+                    for col in cast("Iterable[Column[Any, Any, Any]]", columns)
                     if col.server_default is not None
                     or (
                         col.default is not None
@@ -2797,12 +2797,12 @@ class Mapper(
     @HasMemoized.memoized_attribute
     def _server_onupdate_default_cols(
         self,
-    ) -> Mapping[FromClause, FrozenSet[Column[Any]]]:
+    ) -> Mapping[FromClause, FrozenSet[Column[Any, Any, Any]]]:
         return {
             table: frozenset(
                 [
                     col
-                    for col in cast("Iterable[Column[Any]]", columns)
+                    for col in cast("Iterable[Column[Any, Any, Any]]", columns)
                     if col.server_onupdate is not None
                     or (
                         col.onupdate is not None

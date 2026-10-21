@@ -113,7 +113,7 @@ if not TYPE_CHECKING:
 
 
 _Ts = TypeVarTuple("_Ts")
-
+from typing import Never
 
 class _NoArg(Enum):
     NO_ARG = 0
@@ -1870,7 +1870,7 @@ class _SentinelDefaultCharacterization(Enum):
 
 
 class _SentinelColumnCharacterization(NamedTuple):
-    columns: Optional[Sequence[Column[Any]]] = None
+    columns: Optional[Sequence[Column[Any, Any, Any]]] = None
     is_explicit: bool = False
     is_autoinc: bool = False
     default_characterization: _SentinelDefaultCharacterization = (
@@ -1926,6 +1926,40 @@ class _ColumnMetrics(Generic[_COL_co]):
             if not expanded_proxy_set.intersection(_expand_cloned([t])):
                 return False
         return True
+
+
+class SchemaConst(Enum):
+    RETAIN_SCHEMA = 1
+    """Symbol indicating that a :class:`_schema.Table`, :class:`.Sequence`
+    or in some cases a :class:`_schema.ForeignKey` object, in situations
+    where the object is being copied for a :meth:`.Table.to_metadata`
+    operation, should retain the schema name that it already has.
+
+    """
+
+    BLANK_SCHEMA = 2
+    """Symbol indicating that a :class:`_schema.Table` or :class:`.Sequence`
+    should have 'None' for its schema, even if the parent
+    :class:`_schema.MetaData` has specified a schema.
+
+    .. seealso::
+
+        :paramref:`_schema.MetaData.schema`
+
+        :paramref:`_schema.Table.schema`
+
+        :paramref:`.Sequence.schema`
+
+    """
+
+    NULL_UNSPECIFIED = 3
+    """Symbol indicating the "nullable" keyword was not passed to a Column.
+
+    This is used to distinguish between the use case of passing
+    ``nullable=None`` to a :class:`.Column`, which has special meaning
+    on some backends such as SQL Server.
+
+    """
 
 
 class ColumnCollection(Generic[_COLKEY, _COL_co]):

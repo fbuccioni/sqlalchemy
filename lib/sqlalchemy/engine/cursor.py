@@ -2147,7 +2147,7 @@ class CursorResult(Result[Unpack[_Ts]]):
 
         return self.context.lastrow_has_defaults()
 
-    def postfetch_cols(self) -> Optional[Sequence[Column[Any]]]:
+    def postfetch_cols(self) -> Optional[Sequence[Column[Any, Any, Any]]]:
         """Return ``postfetch_cols()`` from the underlying
         :class:`.ExecutionContext`.
 
@@ -2170,7 +2170,7 @@ class CursorResult(Result[Unpack[_Ts]]):
             )
         return self.context.postfetch_cols
 
-    def prefetch_cols(self) -> Optional[Sequence[Column[Any]]]:
+    def prefetch_cols(self) -> Optional[Sequence[Column[Any, Any, Any]]]:
         """Return ``prefetch_cols()`` from the underlying
         :class:`.ExecutionContext`.
 

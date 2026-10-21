@@ -23,10 +23,10 @@ from ...engine.default import DefaultDialect
 from ...engine.interfaces import TypeCompiler
 from ...sql import elements
 from ...sql import sqltypes
+from ...sql.base import SchemaConst
 from ...sql.compiler import DDLCompiler
 from ...sql.compiler import IdentifierPreparer
 from ...sql.compiler import SQLCompiler
-from ...sql.schema import SchemaConst
 from ...sql.sqltypes import _UUID_RETURN
 from ...sql.sqltypes import UUID
 from ...sql.sqltypes import Uuid
@@ -174,7 +174,7 @@ class MariaDBDDLCompilerShim(DDLCompiler):
     dialect: MariaDBShim
 
     def _mariadb_get_column_specification(
-        self, column: sa_schema.Column[Any], **kw: Any
+        self, column: sa_schema.Column[Any, Any, Any], **kw: Any
     ) -> str:
 
         if (
@@ -187,7 +187,7 @@ class MariaDBDDLCompilerShim(DDLCompiler):
 
     def _mysql_get_column_specification(
         self,
-        column: sa_schema.Column[Any],
+        column: sa_schema.Column[Any, Any, Any],
         *,
         _force_column_to_nullable: bool = False,
         **kw: Any,

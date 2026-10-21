@@ -111,7 +111,7 @@ class _CrudParams(NamedTuple):
     all_multi_params: List[Sequence[_CrudParamElementStr]]
     is_default_metavalue_only: bool = False
     use_insertmanyvalues: bool = False
-    use_sentinel_columns: Optional[Sequence[Column[Any]]] = None
+    use_sentinel_columns: Optional[Sequence[Column[Any, Any, Any]]] = None
 
 
 def _get_crud_params(

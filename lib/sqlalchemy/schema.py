@@ -12,6 +12,7 @@ from __future__ import annotations
 from .sql._annotated_cols import Named as Named
 from .sql._annotated_cols import TypedColumns as TypedColumns
 from .sql.base import SchemaVisitor as SchemaVisitor
+from .sql.base import SchemaConst as SchemaConst
 from .sql.ddl import _CreateDropBase as _CreateDropBase
 from .sql.ddl import AddConstraint as AddConstraint
 from .sql.ddl import BaseDDLElement as BaseDDLElement
@@ -67,7 +68,6 @@ from .sql.schema import Index as Index
 from .sql.schema import insert_sentinel as insert_sentinel
 from .sql.schema import MetaData as MetaData
 from .sql.schema import PrimaryKeyConstraint as PrimaryKeyConstraint
-from .sql.schema import SchemaConst as SchemaConst
 from .sql.schema import SchemaItem as SchemaItem
 from .sql.schema import SchemaVisitable as SchemaVisitable
 from .sql.schema import Sequence as Sequence

@@ -3235,11 +3235,11 @@ class ExecutionContext:
 
     """
 
-    prefetch_cols: util.generic_fn_descriptor[Optional[Sequence[Column[Any]]]]
+    prefetch_cols: util.generic_fn_descriptor[Optional[Sequence[Column[Any, Any, Any]]]]
     """a list of Column objects for which a client-side default
       was fired off.  Applies to inserts and updates."""
 
-    postfetch_cols: util.generic_fn_descriptor[Optional[Sequence[Column[Any]]]]
+    postfetch_cols: util.generic_fn_descriptor[Optional[Sequence[Column[Any, Any, Any]]]]
     """a list of Column objects for which a server-side default or
       inline SQL expression value was fired off.  Applies to inserts
       and updates."""
@@ -3297,7 +3297,7 @@ class ExecutionContext:
 
     def _exec_default(
         self,
-        column: Optional[Column[Any]],
+        column: Optional[Column[Any, Any, Any]],
         default: DefaultGenerator,
         type_: Optional[TypeEngine[Any]],
     ) -> Any:

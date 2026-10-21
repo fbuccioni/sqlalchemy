@@ -2033,7 +2033,7 @@ class MySQLDDLCompiler(
     dialect: MySQLDialect
 
     def get_column_specification(
-        self, column: sa_schema.Column[Any], **kw: Any
+        self, column: sa_schema.Column[Any, Any, Any], **kw: Any
     ) -> str:
         """Builds column DDL."""
 
@@ -2046,7 +2046,7 @@ class MySQLDDLCompiler(
 
     def _mysql_get_column_specification(
         self,
-        column: sa_schema.Column[Any],
+        column: sa_schema.Column[Any, Any, Any],
         *,
         _force_column_to_nullable: bool = False,
         **kw: Any,

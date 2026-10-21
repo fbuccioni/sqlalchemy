@@ -1471,7 +1471,7 @@ def _is_many_to_many(
     if len(fk_constraints) != 2:
         return None, None, None
 
-    cols: List[Column[Any]] = sum(
+    cols: List[Column[Any, Any, Any]] = sum(
         [
             [fk.parent for fk in fk_constraint.elements]
             for fk_constraint in fk_constraints

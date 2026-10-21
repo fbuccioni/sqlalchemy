@@ -567,7 +567,7 @@ class CompositeProperty(
 
     @util.non_memoized_property
     @util.preload_module("orm.properties")
-    def columns(self) -> Sequence[Column[Any]]:
+    def columns(self) -> Sequence[Column[Any, Any, Any]]:
         MappedColumn = util.preloaded.orm_properties.MappedColumn
         return [
             a.column if isinstance(a, MappedColumn) else a
@@ -580,7 +580,7 @@ class CompositeProperty(
         return self
 
     @property
-    def columns_to_assign(self) -> List[Tuple[schema.Column[Any], int]]:
+    def columns_to_assign(self) -> List[Tuple[schema.Column[Any, Any, Any], int]]:
         return [(c, 0) for c in self.columns if c.table is None]
 
     @util.preload_module("orm.properties")
