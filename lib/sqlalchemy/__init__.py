@@ -83,6 +83,8 @@ from .schema import Named as Named
 from .schema import PrimaryKeyConstraint as PrimaryKeyConstraint
 from .schema import Sequence as Sequence
 from .schema import Table as Table
+from .schema import TypedColumn as TypedColumn
+from .schema import TypedNullableColumn as TypedNullableColumn
 from .schema import TypedColumns as TypedColumns
 from .schema import UniqueConstraint as UniqueConstraint
 from .sql import ColumnExpressionArgument as ColumnExpressionArgument

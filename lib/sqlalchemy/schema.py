@@ -72,4 +72,6 @@ from .sql.schema import SchemaItem as SchemaItem
 from .sql.schema import SchemaVisitable as SchemaVisitable
 from .sql.schema import Sequence as Sequence
 from .sql.schema import Table as Table
+from .sql.schema import TypedColumn as TypedColumn
+from .sql.schema import TypedNullableColumn as TypedNullableColumn
 from .sql.schema import UniqueConstraint as UniqueConstraint

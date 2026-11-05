@@ -15,6 +15,7 @@ from typing import Generic
 from typing import Iterable
 from typing import Literal
 from typing import Mapping
+from typing import Never
 from typing import NoReturn
 from typing import Optional
 from typing import overload
@@ -24,8 +25,10 @@ from typing import Tuple
 from typing import Type
 from typing import TYPE_CHECKING
 from typing import TypeAlias
-from typing import TypeVar
+#from typing import TypeVar
 from typing import Union
+
+from typing_extensions import TypeVar
 
 from . import roles
 from .. import exc
@@ -73,7 +76,6 @@ if TYPE_CHECKING:
     from .selectable import TableClause
     from .sqltypes import TableValueType
     from .sqltypes import TupleType
-    from .type_api import TypeEngine
     from ..engine import Connection
     from ..engine import Dialect
     from ..engine import Engine
@@ -84,10 +86,7 @@ _T_co = TypeVar("_T_co", bound=Any, covariant=True)
 _Ts = TypeVarTuple("_Ts")
 _Ts2 = TypeVarTuple("_Ts2")
 
-
-_CE = TypeVar("_CE", bound="ColumnElement[Any]")
-
-_CLE = TypeVar("_CLE", bound="ClauseElement")
+_D = TypeVar('_D', default=Never)
 
 
 class _HasClauseElement(Protocol, Generic[_T_co]):

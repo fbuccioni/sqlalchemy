@@ -43,11 +43,13 @@ from typing import ClassVar
 from typing import Collection
 from typing import Dict
 from typing import Final
+from typing import Generic
 from typing import Iterable
 from typing import Iterator
 from typing import List
 from typing import Literal
 from typing import Mapping
+from typing import Never
 from typing import NamedTuple
 from typing import NoReturn
 from typing import Optional
@@ -73,7 +75,7 @@ from ._annotated_cols import _extract_columns_from_class
 from ._annotated_cols import _TC_co
 from ._annotated_cols import Named
 from ._annotated_cols import TypedColumns
-from ._typing import _T
+from ._typing import _T, _D
 from .base import _DefaultDescriptionTuple
 from .base import _NoArg
 from .base import _NoneName
@@ -1775,7 +1777,7 @@ class Table(
         return self._schema_item_copy(table)
 
 
-class Column(DialectKWArgs, SchemaItem, ColumnClause[_T], Named[_T]):
+class Column(DialectKWArgs, SchemaItem, ColumnClause[_T], Named[_T], Generic[_T, _D]):
     """Represents a column in a database table."""
 
     __visit_name__ = "column"
@@ -1785,29 +1787,148 @@ class Column(DialectKWArgs, SchemaItem, ColumnClause[_T], Named[_T]):
 
     server_default: Optional[FetchedValue]
 
+    @overload
     def __init__(
         self,
-        __name_pos: Optional[
-            Union[str, _CovariantTypeEngineArgument[_T], SchemaEventTarget]
-        ] = None,
-        __type_pos: Optional[
-            Union[_CovariantTypeEngineArgument[_T], SchemaEventTarget]
-        ] = None,
+        __name_pos: _CovariantTypeEngineArgument[_T] | SchemaEventTarget,
+        __type_pos: None = None,
         /,
         *args: SchemaEventTarget,
         name: Optional[str] = None,
         type_: Optional[_CovariantTypeEngineArgument[_T]] = None,
         autoincrement: _AutoIncrementType = "auto",
-        default: Optional[Any] = _NoArg.NO_ARG,
+        default: _D = cast(Never, _NoArg.NO_ARG),
         insert_default: Optional[Any] = _NoArg.NO_ARG,
         doc: Optional[str] = None,
         key: Optional[str] = None,
         index: Optional[bool] = None,
         unique: Optional[bool] = None,
         info: Optional[_InfoType] = None,
-        nullable: Optional[
-            Union[bool, Literal[SchemaConst.NULL_UNSPECIFIED]]
-        ] = SchemaConst.NULL_UNSPECIFIED,
+        nullable: bool | Never = cast(Never, SchemaConst.NULL_UNSPECIFIED),
+        onupdate: Optional[Any] = None,
+        primary_key: bool = False,
+        server_default: Optional[_ServerDefaultArgument] = None,
+        server_onupdate: Optional[_ServerOnUpdateArgument] = None,
+        quote: Optional[bool] = None,
+        system: bool = False,
+        comment: Optional[str] = None,
+        insert_sentinel: bool = False,
+        _omit_from_statements: bool = False,
+        _proxies: Optional[Any] = None,
+        **dialect_kwargs: Any,
+    ):  ...
+
+
+    @overload
+    def __init__(
+        self,
+        __name_pos: str,
+        __type_pos: _CovariantTypeEngineArgument[_T] | SchemaEventTarget,
+        /,
+        *args: SchemaEventTarget,
+        name: Optional[str] = None,
+        type_: Optional[_CovariantTypeEngineArgument[_T]] = None,
+        autoincrement: _AutoIncrementType = "auto",
+        default: _D = _NoArg.NO_ARG,
+        insert_default: Optional[Any] = _NoArg.NO_ARG,
+        doc: Optional[str] = None,
+        key: Optional[str] = None,
+        index: Optional[bool] = None,
+        unique: Optional[bool] = None,
+        info: Optional[_InfoType] = None,
+        nullable: bool | Never = cast(Never, SchemaConst.NULL_UNSPECIFIED),
+        onupdate: Optional[Any] = None,
+        primary_key: bool = False,
+        server_default: Optional[_ServerDefaultArgument] = None,
+        server_onupdate: Optional[_ServerOnUpdateArgument] = None,
+        quote: Optional[bool] = None,
+        system: bool = False,
+        comment: Optional[str] = None,
+        insert_sentinel: bool = False,
+        _omit_from_statements: bool = False,
+        _proxies: Optional[Any] = None,
+        **dialect_kwargs: Any,
+    ): ...
+
+    @overload
+    def __init__(
+        self,
+        __name_pos: str,
+        __type_pos: None = None,
+        /,
+        *args: SchemaEventTarget,
+        name: Optional[str] = None,
+        type_: Optional[_CovariantTypeEngineArgument[_T]] = None,
+        autoincrement: _AutoIncrementType = "auto",
+        default: _D = _NoArg.NO_ARG,
+        insert_default: Optional[Any] = _NoArg.NO_ARG,
+        doc: Optional[str] = None,
+        key: Optional[str] = None,
+        index: Optional[bool] = None,
+        unique: Optional[bool] = None,
+        info: Optional[_InfoType] = None,
+        nullable: bool | Never = cast(Never, SchemaConst.NULL_UNSPECIFIED),
+        onupdate: Optional[Any] = None,
+        primary_key: bool = False,
+        server_default: Optional[_ServerDefaultArgument] = None,
+        server_onupdate: Optional[_ServerOnUpdateArgument] = None,
+        quote: Optional[bool] = None,
+        system: bool = False,
+        comment: Optional[str] = None,
+        insert_sentinel: bool = False,
+        _omit_from_statements: bool = False,
+        _proxies: Optional[Any] = None,
+        **dialect_kwargs: Any,
+    ): ...
+
+    @overload
+    def __init__(
+        self,
+        __name_pos: None = None,
+        __type_pos: None = None,
+        /,
+        *args: SchemaEventTarget,
+        name: Optional[str] = None,
+        type_: Optional[_CovariantTypeEngineArgument[_T]] = None,
+        autoincrement: _AutoIncrementType = "auto",
+        default: _D = _NoArg.NO_ARG,
+        insert_default: Optional[Any] = _NoArg.NO_ARG,
+        doc: Optional[str] = None,
+        key: Optional[str] = None,
+        index: Optional[bool] = None,
+        unique: Optional[bool] = None,
+        info: Optional[_InfoType] = None,
+        nullable: bool | Never = cast(Never, SchemaConst.NULL_UNSPECIFIED),
+        onupdate: Optional[Any] = None,
+        primary_key: bool = False,
+        server_default: Optional[_ServerDefaultArgument] = None,
+        server_onupdate: Optional[_ServerOnUpdateArgument] = None,
+        quote: Optional[bool] = None,
+        system: bool = False,
+        comment: Optional[str] = None,
+        insert_sentinel: bool = False,
+        _omit_from_statements: bool = False,
+        _proxies: Optional[Any] = None,
+        **dialect_kwargs: Any,
+    ): ...
+
+    def __init__(
+        self,
+        __name_pos: _CovariantTypeEngineArgument[_T] | SchemaEventTarget | str | None = None,
+        __type_pos: _CovariantTypeEngineArgument[_T] | SchemaEventTarget | None = None,
+        /,
+        *args: SchemaEventTarget,
+        name: Optional[str] = None,
+        type_: Optional[_CovariantTypeEngineArgument[_T]] = None,
+        autoincrement: _AutoIncrementType = "auto",
+        default: _D = cast(Never, _NoArg.NO_ARG),
+        insert_default: Optional[Any] = _NoArg.NO_ARG,
+        doc: Optional[str] = None,
+        key: Optional[str] = None,
+        index: Optional[bool] = None,
+        unique: Optional[bool] = None,
+        info: Optional[_InfoType] = None,
+        nullable: bool | Never = cast(Never, SchemaConst.NULL_UNSPECIFIED),
         onupdate: Optional[Any] = None,
         primary_key: bool = False,
         server_default: Optional[_ServerDefaultArgument] = None,
@@ -2460,6 +2581,8 @@ class Column(DialectKWArgs, SchemaItem, ColumnClause[_T], Named[_T]):
 
     constraints: Set[Constraint]
 
+    nullable: Literal[True, False]
+
     foreign_keys: Set[ForeignKey]
     """A collection of all :class:`_schema.ForeignKey` marker objects
        associated with this :class:`_schema.Column`.
@@ -2989,6 +3112,635 @@ class Column(DialectKWArgs, SchemaItem, ColumnClause[_T], Named[_T]):
             foreign_keys.update(fk)  # type: ignore[arg-type]
 
         return c.key, c
+
+
+class TypedColumn(Column[_T, _D]):
+    if TYPE_CHECKING:
+        @overload
+        def __get__(self, instance: None, owner: Any) -> Column[_T, _D]: ...
+
+        @overload
+        def __get__(self, instance: object, owner: Any) -> _T | _D: ...
+
+
+class TypedNullableColumn(Column[_T, _D]):
+    if TYPE_CHECKING:
+        @overload
+        def __get__(self: Self, instance: None, owner: Any) -> Column[_T, _D]: ...
+
+        @overload
+        def __get__(self, instance: object, owner: Any) -> _T | _D | None: ...
+
+    @overload
+    def __init__(
+        self,
+        __name_pos: _CovariantTypeEngineArgument[_T] | SchemaEventTarget,
+        __type_pos: None = None,
+        /,
+        *args: SchemaEventTarget,
+        name: Optional[str] = None,
+        type_: Optional[_CovariantTypeEngineArgument[_T]] = None,
+        autoincrement: _AutoIncrementType = "auto",
+        default: _D = cast(Never, _NoArg.NO_ARG),
+        insert_default: Optional[Any] = _NoArg.NO_ARG,
+        doc: Optional[str] = None,
+        key: Optional[str] = None,
+        index: Optional[bool] = None,
+        unique: Optional[bool] = None,
+        info: Optional[_InfoType] = None,
+        onupdate: Optional[Any] = None,
+        primary_key: bool = False,
+        server_default: Optional[_ServerDefaultArgument] = None,
+        server_onupdate: Optional[_ServerOnUpdateArgument] = None,
+        quote: Optional[bool] = None,
+        system: bool = False,
+        comment: Optional[str] = None,
+        insert_sentinel: bool = False,
+        _omit_from_statements: bool = False,
+        _proxies: Optional[Any] = None,
+        **dialect_kwargs: Any,
+    ):  ...
+
+
+    @overload
+    def __init__(
+        self,
+        __name_pos: str,
+        __type_pos: _CovariantTypeEngineArgument[_T] | SchemaEventTarget,
+        /,
+        *args: SchemaEventTarget,
+        name: Optional[str] = None,
+        type_: Optional[_CovariantTypeEngineArgument[_T]] = None,
+        autoincrement: _AutoIncrementType = "auto",
+        default: _D = _NoArg.NO_ARG,
+        insert_default: Optional[Any] = _NoArg.NO_ARG,
+        doc: Optional[str] = None,
+        key: Optional[str] = None,
+        index: Optional[bool] = None,
+        unique: Optional[bool] = None,
+        info: Optional[_InfoType] = None,
+        onupdate: Optional[Any] = None,
+        primary_key: bool = False,
+        server_default: Optional[_ServerDefaultArgument] = None,
+        server_onupdate: Optional[_ServerOnUpdateArgument] = None,
+        quote: Optional[bool] = None,
+        system: bool = False,
+        comment: Optional[str] = None,
+        insert_sentinel: bool = False,
+        _omit_from_statements: bool = False,
+        _proxies: Optional[Any] = None,
+        **dialect_kwargs: Any,
+    ): ...
+
+    def __init__(
+        self,
+        __name_pos: _CovariantTypeEngineArgument[_T] | SchemaEventTarget | str | None = None,
+        __type_pos: _CovariantTypeEngineArgument[_T] | SchemaEventTarget | None = None,
+        /,
+        *args: SchemaEventTarget,
+        name: Optional[str] = None,
+        type_: Optional[_CovariantTypeEngineArgument[_T]] = None,
+        autoincrement: _AutoIncrementType = "auto",
+        default: _D = cast(Never, _NoArg.NO_ARG),
+        insert_default: Optional[Any] = _NoArg.NO_ARG,
+        doc: Optional[str] = None,
+        key: Optional[str] = None,
+        index: Optional[bool] = None,
+        unique: Optional[bool] = None,
+        info: Optional[_InfoType] = None,
+        onupdate: Optional[Any] = None,
+        primary_key: bool = False,
+        server_default: Optional[_ServerDefaultArgument] = None,
+        server_onupdate: Optional[_ServerOnUpdateArgument] = None,
+        quote: Optional[bool] = None,
+        system: bool = False,
+        comment: Optional[str] = None,
+        insert_sentinel: bool = False,
+        _omit_from_statements: bool = False,
+        _proxies: Optional[Any] = None,
+        **dialect_kwargs: Any,
+    ):
+        r"""
+        Construct a new ``Column`` object.
+
+        :param name: The name of this column as represented in the database.
+          This argument may be the first positional argument, or specified
+          via keyword.
+
+          Names which contain no upper case characters
+          will be treated as case insensitive names, and will not be quoted
+          unless they are a reserved word.  Names with any number of upper
+          case characters will be quoted and sent exactly.  Note that this
+          behavior applies even for databases which standardize upper
+          case names as case insensitive such as Oracle Database.
+
+          The name field may be omitted at construction time and applied
+          later, at any time before the Column is associated with a
+          :class:`_schema.Table`.  This is to support convenient
+          usage within the :mod:`~sqlalchemy.ext.declarative` extension.
+
+        :param type\_: The column's type, indicated using an instance which
+          subclasses :class:`~sqlalchemy.types.TypeEngine`.  If no arguments
+          are required for the type, the class of the type can be sent
+          as well, e.g.::
+
+            # use a type with arguments
+            Column("data", String(50))
+
+            # use no arguments
+            Column("level", Integer)
+
+          The ``type`` argument may be the second positional argument
+          or specified by keyword.
+
+          If the ``type`` is ``None`` or is omitted, it will first default to
+          the special type :class:`.NullType`.  If and when this
+          :class:`_schema.Column` is made to refer to another column using
+          :class:`_schema.ForeignKey` and/or
+          :class:`_schema.ForeignKeyConstraint`, the type
+          of the remote-referenced column will be copied to this column as
+          well, at the moment that the foreign key is resolved against that
+          remote :class:`_schema.Column` object.
+
+        :param \*args: Additional positional arguments include various
+          :class:`.SchemaItem` derived constructs which will be applied
+          as options to the column.  These include instances of
+          :class:`.Constraint`, :class:`_schema.ForeignKey`,
+          :class:`.ColumnDefault`, :class:`.Sequence`, :class:`.Computed`
+          :class:`.Identity`.  In some cases an
+          equivalent keyword argument is available such as ``server_default``,
+          ``default`` and ``unique``.
+
+        :param autoincrement: Set up "auto increment" semantics for an
+          **integer primary key column with no foreign key dependencies**
+          (see later in this docstring for a more specific definition).
+          This may influence the :term:`DDL` that will be emitted for
+          this column during a table create, as well as how the column
+          will be considered when INSERT statements are compiled and
+          executed.
+
+          The default value is the string ``"auto"``,
+          which indicates that a single-column (i.e. non-composite) primary key
+          that is of an INTEGER type with no other client-side or server-side
+          default constructs indicated should receive auto increment semantics
+          automatically. Other values include ``True`` (force this column to
+          have auto-increment semantics for a :term:`composite primary key` as
+          well), ``False`` (this column should never have auto-increment
+          semantics), and the string ``"ignore_fk"`` (special-case for foreign
+          key columns, see below).
+
+          The term "auto increment semantics" refers both to the kind of DDL
+          that will be emitted for the column within a CREATE TABLE statement,
+          when methods such as :meth:`.MetaData.create_all` and
+          :meth:`.Table.create` are invoked, as well as how the column will be
+          considered when an INSERT statement is compiled and emitted to the
+          database:
+
+          * **DDL rendering** (i.e. :meth:`.MetaData.create_all`,
+            :meth:`.Table.create`): When used on a :class:`.Column` that has
+            no other
+            default-generating construct associated with it (such as a
+            :class:`.Sequence` or :class:`.Identity` construct), the parameter
+            will imply that database-specific keywords such as PostgreSQL
+            ``SERIAL``, MySQL ``AUTO_INCREMENT``, or ``IDENTITY`` on SQL Server
+            should also be rendered.  Not every database backend has an
+            "implied" default generator available; for example the Oracle Database
+            backends always needs an explicit construct such as
+            :class:`.Identity` to be included with a :class:`.Column` in order
+            for the DDL rendered to include auto-generating constructs to also
+            be produced in the database.
+
+          * **INSERT semantics** (i.e. when a :func:`_sql.insert` construct is
+            compiled into a SQL string and is then executed on a database using
+            :meth:`_engine.Connection.execute` or equivalent): A single-row
+            INSERT statement will be known to produce a new integer primary key
+            value automatically for this column, which will be accessible
+            after the statement is invoked via the
+            :attr:`.CursorResult.inserted_primary_key` attribute upon the
+            :class:`_result.Result` object.   This also applies towards use of the
+            ORM when ORM-mapped objects are persisted to the database,
+            indicating that a new integer primary key will be available to
+            become part of the :term:`identity key` for that object.  This
+            behavior takes place regardless of what DDL constructs are
+            associated with the :class:`_schema.Column` and is independent
+            of the "DDL Rendering" behavior discussed in the previous note
+            above.
+
+          The parameter may be set to ``True`` to indicate that a column which
+          is part of a composite (i.e. multi-column) primary key should
+          have autoincrement semantics, though note that only one column
+          within a primary key may have this setting.    It can also
+          be set to ``True`` to indicate autoincrement semantics on a
+          column that has a client-side or server-side default configured,
+          however note that not all dialects can accommodate all styles
+          of default as an "autoincrement".  It can also be
+          set to ``False`` on a single-column primary key that has a
+          datatype of INTEGER in order to disable auto increment semantics
+          for that column.
+
+          The setting *only* has an effect for columns which are:
+
+          * Integer derived (i.e. INT, SMALLINT, BIGINT).
+
+          * Part of the primary key
+
+          * Not referring to another column via :class:`_schema.ForeignKey`,
+            unless
+            the value is specified as ``'ignore_fk'``::
+
+                # turn on autoincrement for this column despite
+                # the ForeignKey()
+                Column(
+                    "id",
+                    ForeignKey("other.id"),
+                    primary_key=True,
+                    autoincrement="ignore_fk",
+                )
+
+          It is typically not desirable to have "autoincrement" enabled on a
+          column that refers to another via foreign key, as such a column is
+          required to refer to a value that originates from elsewhere.
+
+          The setting has these effects on columns that meet the
+          above criteria:
+
+          * DDL issued for the column, if the column does not already include
+            a default generating construct supported by the backend such as
+            :class:`.Identity`, will include database-specific
+            keywords intended to signify this column as an
+            "autoincrement" column for specific backends.   Behavior for
+            primary SQLAlchemy dialects includes:
+
+            * AUTO INCREMENT on MySQL and MariaDB
+            * SERIAL on PostgreSQL
+            * IDENTITY on MS-SQL - this occurs even without the
+              :class:`.Identity` construct as the
+              :paramref:`.Column.autoincrement` parameter pre-dates this
+              construct.
+            * SQLite - SQLite integer primary key columns are implicitly
+              "auto incrementing" and no additional keywords are rendered;
+              to render the special SQLite keyword ``AUTOINCREMENT``
+              is not included as this is unnecessary and not recommended
+              by the database vendor.  See the section
+              :ref:`sqlite_autoincrement` for more background.
+            * Oracle Database - The Oracle Database dialects have no default "autoincrement"
+              feature available at this time, instead the :class:`.Identity`
+              construct is recommended to achieve this (the :class:`.Sequence`
+              construct may also be used).
+            * Third-party dialects - consult those dialects' documentation
+              for details on their specific behaviors.
+
+          * When a single-row :func:`_sql.insert` construct is compiled and
+            executed, which does not set the :meth:`_sql.Insert.inline`
+            modifier, newly generated primary key values for this column
+            will be automatically retrieved upon statement execution
+            using a method specific to the database driver in use:
+
+            * MySQL, SQLite - calling upon ``cursor.lastrowid()``
+              (see
+              `https://www.python.org/dev/peps/pep-0249/#lastrowid
+              <https://www.python.org/dev/peps/pep-0249/#lastrowid>`_)
+            * PostgreSQL, SQL Server, Oracle Database - use RETURNING or an equivalent
+              construct when rendering an INSERT statement, and then retrieving
+              the newly generated primary key values after execution
+            * PostgreSQL, Oracle Database for :class:`_schema.Table` objects that
+              set :paramref:`_schema.Table.implicit_returning` to False -
+              for a :class:`.Sequence` only, the :class:`.Sequence` is invoked
+              explicitly before the INSERT statement takes place so that the
+              newly generated primary key value is available to the client
+            * SQL Server for :class:`_schema.Table` objects that
+              set :paramref:`_schema.Table.implicit_returning` to False -
+              the ``SELECT scope_identity()`` construct is used after the
+              INSERT statement is invoked to retrieve the newly generated
+              primary key value.
+            * Third-party dialects - consult those dialects' documentation
+              for details on their specific behaviors.
+
+          * For multiple-row :func:`_sql.insert` constructs invoked with
+            a list of parameters (i.e. "executemany" semantics), primary-key
+            retrieving behaviors are generally disabled, however there may
+            be special APIs that may be used to retrieve lists of new
+            primary key values for an "executemany", such as the psycopg2
+            "fast insertmany" feature.  Such features are very new and
+            may not yet be well covered in documentation.
+
+        :param default: A scalar, Python callable, or
+            :class:`_expression.ColumnElement` expression representing the
+            *default value* for this column, which will be invoked upon insert
+            if this column is otherwise not specified in the VALUES clause of
+            the insert. This is a shortcut to using :class:`.ColumnDefault` as
+            a positional argument; see that class for full detail on the
+            structure of the argument.
+
+            Contrast this argument to
+            :paramref:`_schema.Column.server_default`
+            which creates a default generator on the database side.
+
+            .. seealso::
+
+                :ref:`metadata_defaults_toplevel`
+
+        :param insert_default: An alias of :paramref:`.Column.default`
+            for compatibility with :func:`_orm.mapped_column`.
+
+            .. versionadded:: 2.0.31
+
+        :param doc: optional String that can be used by the ORM or similar
+            to document attributes on the Python side.   This attribute does
+            **not** render SQL comments; use the
+            :paramref:`_schema.Column.comment`
+            parameter for this purpose.
+
+        :param key: An optional string identifier which will identify this
+            ``Column`` object on the :class:`_schema.Table`.
+            When a key is provided,
+            this is the only identifier referencing the ``Column`` within the
+            application, including ORM attribute mapping; the ``name`` field
+            is used only when rendering SQL.
+
+        :param index: When ``True``, indicates that a :class:`_schema.Index`
+            construct will be automatically generated for this
+            :class:`_schema.Column`, which will result in a "CREATE INDEX"
+            statement being emitted for the :class:`_schema.Table` when the DDL
+            create operation is invoked.
+
+            Using this flag is equivalent to making use of the
+            :class:`_schema.Index` construct explicitly at the level of the
+            :class:`_schema.Table` construct itself::
+
+                Table(
+                    "some_table",
+                    metadata,
+                    Column("x", Integer),
+                    Index("ix_some_table_x", "x"),
+                )
+
+            To add the :paramref:`_schema.Index.unique` flag to the
+            :class:`_schema.Index`, set both the
+            :paramref:`_schema.Column.unique` and
+            :paramref:`_schema.Column.index` flags to True simultaneously,
+            which will have the effect of rendering the "CREATE UNIQUE INDEX"
+            DDL instruction instead of "CREATE INDEX".
+
+            The name of the index is generated using the
+            :ref:`default naming convention <constraint_default_naming_convention>`
+            which for the :class:`_schema.Index` construct is of the form
+            ``ix_<tablename>_<columnname>``.
+
+            As this flag is intended only as a convenience for the common case
+            of adding a single-column, default configured index to a table
+            definition, explicit use of the :class:`_schema.Index` construct
+            should be preferred for most use cases, including composite indexes
+            that encompass more than one column, indexes with SQL expressions
+            or ordering, backend-specific index configuration options, and
+            indexes that use a specific name.
+
+            .. note:: the :attr:`_schema.Column.index` attribute on
+               :class:`_schema.Column`
+               **does not indicate** if this column is indexed or not, only
+               if this flag was explicitly set here.  To view indexes on
+               a column, view the :attr:`_schema.Table.indexes` collection
+               or use :meth:`_reflection.Inspector.get_indexes`.
+
+            .. seealso::
+
+                :ref:`schema_indexes`
+
+                :ref:`constraint_naming_conventions`
+
+                :paramref:`_schema.Column.unique`
+
+        :param info: Optional data dictionary which will be populated into the
+            :attr:`.SchemaItem.info` attribute of this object.
+
+        :param onupdate: A scalar, Python callable, or
+            :class:`~sqlalchemy.sql.expression.ClauseElement` representing a
+            default value to be applied to the column within UPDATE
+            statements, which will be invoked upon update if this column is not
+            present in the SET clause of the update. This is a shortcut to
+            using :class:`.ColumnDefault` as a positional argument with
+            ``for_update=True``.
+
+            .. seealso::
+
+                :ref:`metadata_defaults` - complete discussion of onupdate
+
+        :param primary_key: If ``True``, marks this column as a primary key
+            column. Multiple columns can have this flag set to specify
+            composite primary keys. As an alternative, the primary key of a
+            :class:`_schema.Table` can be specified via an explicit
+            :class:`.PrimaryKeyConstraint` object.
+
+        :param server_default: A :class:`.FetchedValue` instance, str, Unicode
+            or :func:`~sqlalchemy.sql.expression.text` construct representing
+            the DDL DEFAULT value for the column.
+
+            String types will be emitted as-is, surrounded by single quotes::
+
+                Column("x", Text, server_default="val")
+
+            will render:
+
+            .. sourcecode:: sql
+
+                x TEXT DEFAULT 'val'
+
+            A :func:`~sqlalchemy.sql.expression.text` expression will be
+            rendered as-is, without quotes::
+
+                Column("y", DateTime, server_default=text("NOW()"))
+
+            will render:
+
+            .. sourcecode:: sql
+
+                y DATETIME DEFAULT NOW()
+
+            Strings and text() will be converted into a
+            :class:`.DefaultClause` object upon initialization.
+
+            This parameter can also accept complex combinations of contextually
+            valid SQLAlchemy expressions or constructs::
+
+                from sqlalchemy import create_engine
+                from sqlalchemy import Table, Column, MetaData, ARRAY, Text
+                from sqlalchemy.dialects.postgresql import array
+
+                engine = create_engine(
+                    "postgresql+psycopg2://scott:tiger@localhost/mydatabase"
+                )
+                metadata_obj = MetaData()
+                tbl = Table(
+                    "foo",
+                    metadata_obj,
+                    Column(
+                        "bar", ARRAY(Text), server_default=array(["biz", "bang", "bash"])
+                    ),
+                )
+                metadata_obj.create_all(engine)
+
+            The above results in a table created with the following SQL:
+
+            .. sourcecode:: sql
+
+                CREATE TABLE foo (
+                    bar TEXT[] DEFAULT ARRAY['biz', 'bang', 'bash']
+                )
+
+            Use :class:`.FetchedValue` to indicate that an already-existing
+            column will generate a default value on the database side which
+            will be available to SQLAlchemy for post-fetch after inserts. This
+            construct does not specify any DDL and the implementation is left
+            to the database, such as via a trigger.
+
+            .. seealso::
+
+                :ref:`server_defaults` - complete discussion of server side
+                defaults
+
+        :param server_onupdate: A :class:`.FetchedValue` instance
+            representing a database-side default generation function,
+            such as a trigger. This
+            indicates to SQLAlchemy that a newly generated value will be
+            available after updates. This construct does not actually
+            implement any kind of generation function within the database,
+            which instead must be specified separately.
+
+
+            .. warning:: This directive **does not** currently produce MySQL's
+               "ON UPDATE CURRENT_TIMESTAMP()" clause.  See
+               :ref:`mysql_timestamp_onupdate` for background on how to
+               produce this clause.
+
+            .. seealso::
+
+                :ref:`triggered_columns`
+
+        :param quote: Force quoting of this column's name on or off,
+             corresponding to ``True`` or ``False``. When left at its default
+             of ``None``, the column identifier will be quoted according to
+             whether the name is case sensitive (identifiers with at least one
+             upper case character are treated as case sensitive), or if it's a
+             reserved word. This flag is only needed to force quoting of a
+             reserved word which is not known by the SQLAlchemy dialect.
+
+        :param unique: When ``True``, and the :paramref:`_schema.Column.index`
+            parameter is left at its default value of ``False``,
+            indicates that a :class:`_schema.UniqueConstraint`
+            construct will be automatically generated for this
+            :class:`_schema.Column`,
+            which will result in a "UNIQUE CONSTRAINT" clause referring
+            to this column being included
+            in the ``CREATE TABLE`` statement emitted, when the DDL create
+            operation for the :class:`_schema.Table` object is invoked.
+
+            When this flag is ``True`` while the
+            :paramref:`_schema.Column.index` parameter is simultaneously
+            set to ``True``, the effect instead is that a
+            :class:`_schema.Index` construct which includes the
+            :paramref:`_schema.Index.unique` parameter set to ``True``
+            is generated.  See the documentation for
+            :paramref:`_schema.Column.index` for additional detail.
+
+            Using this flag is equivalent to making use of the
+            :class:`_schema.UniqueConstraint` construct explicitly at the
+            level of the :class:`_schema.Table` construct itself::
+
+                Table("some_table", metadata, Column("x", Integer), UniqueConstraint("x"))
+
+            The :paramref:`_schema.UniqueConstraint.name` parameter
+            of the unique constraint object is left at its default value
+            of ``None``; in the absence of a :ref:`naming convention <constraint_naming_conventions>`
+            for the enclosing :class:`_schema.MetaData`, the UNIQUE CONSTRAINT
+            construct will be emitted as unnamed, which typically invokes
+            a database-specific naming convention to take place.
+
+            As this flag is intended only as a convenience for the common case
+            of adding a single-column, default configured unique constraint to a table
+            definition, explicit use of the :class:`_schema.UniqueConstraint` construct
+            should be preferred for most use cases, including composite constraints
+            that encompass more than one column, backend-specific index configuration options, and
+            constraints that use a specific name.
+
+            .. note:: the :attr:`_schema.Column.unique` attribute on
+                :class:`_schema.Column`
+                **does not indicate** if this column has a unique constraint or
+                not, only if this flag was explicitly set here.  To view
+                indexes and unique constraints that may involve this column,
+                view the
+                :attr:`_schema.Table.indexes` and/or
+                :attr:`_schema.Table.constraints` collections or use
+                :meth:`_reflection.Inspector.get_indexes` and/or
+                :meth:`_reflection.Inspector.get_unique_constraints`
+
+            .. seealso::
+
+                :ref:`schema_unique_constraint`
+
+                :ref:`constraint_naming_conventions`
+
+                :paramref:`_schema.Column.index`
+
+        :param system: When ``True``, indicates this is a "system" column,
+             that is a column which is automatically made available by the
+             database, and should not be included in the columns list for a
+             ``CREATE TABLE`` statement.
+
+             For more elaborate scenarios where columns should be
+             conditionally rendered differently on different backends,
+             consider custom compilation rules for :class:`.CreateColumn`.
+
+        :param comment: Optional string that will render an SQL comment on
+             table creation.
+
+        :param insert_sentinel: Marks this :class:`_schema.Column` as an
+         :term:`insert sentinel` used for optimizing the performance of the
+         :term:`insertmanyvalues` feature for tables that don't
+         otherwise have qualifying primary key configurations.
+
+         .. versionadded:: 2.0.10
+
+         .. seealso::
+
+            :func:`_schema.insert_sentinel` - all in one helper for declaring
+            sentinel columns
+
+            :ref:`engine_insertmanyvalues`
+
+            :ref:`engine_insertmanyvalues_sentinel_columns`
+
+
+        """  # noqa: E501, RST201, RST202
+
+        super().__init__(
+            __name_pos,
+            __type_pos,
+            *args,
+            name=name,
+            type_=type_,
+            autoincrement=autoincrement,
+            default=default,
+            nullable=True,
+            insert_default=insert_default,
+            doc=doc,
+            key=key,
+            index=index,
+            unique=unique,
+            info=info,
+            onupdate=onupdate,
+            primary_key=primary_key,
+            server_default=server_default,
+            server_onupdate=server_onupdate,
+            quote=quote,
+            system=system,
+            comment=comment,
+            insert_sentinel=insert_sentinel,
+            _omit_from_statements=_omit_from_statements,
+            _proxies=_proxies,
+            **dialect_kwargs,
+        )
+
+
 
 
 def insert_sentinel(

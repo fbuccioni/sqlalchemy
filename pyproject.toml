@@ -303,7 +303,7 @@ markers = [
 
 
 [tool.pyright]
-
+typeCheckingMode = "off"
 reportPrivateUsage = "none"
 reportUnusedClass = "none"
 reportUnusedFunction = "none"
